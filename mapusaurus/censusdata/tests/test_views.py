@@ -32,7 +32,7 @@ class ViewsTest(TestCase):
         stats.geoid_id = '1222233300'
         stats.save()
         lendstats = LendingStats(
-            geo_id='10000', institution_id="736-4045996",
+            geo_id='201310000', institution_id="736-4045996",
             lar_median=3, lar_count=4,
             fha_count=2, fha_bucket=2)
         lendstats.save()

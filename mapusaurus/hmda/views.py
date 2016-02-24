@@ -41,7 +41,7 @@ def loan_originations(request):
                 query = query.filter(institution=institution_selected)
         else: 
             query = query.filter(institution=institution_selected)
-    
+
     if len(census_tracts) > 0:
         query = query.filter(geo__in=census_tracts)
 

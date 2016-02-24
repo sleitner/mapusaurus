@@ -165,16 +165,17 @@ def minority_aggregation_as_json(request):
 
     lender = get_object_or_404(Institution, pk=request.GET.get('lender'))
     metro = get_object_or_404(Geo, geo_type=Geo.METRO_TYPE, geoid=request.GET.get('metro'))
+    year = metro.year
     peer_request = HttpRequest()
     peer_request.GET['lender'] = lender.institution_id
     peer_request.GET['metro']= metro.geoid
     peer_request.GET['peers'] = 'true'
     peer_lar_data = loan_originations_as_json(peer_request)
 
-    msa_counties = Geo.objects.filter(geo_type=Geo.COUNTY_TYPE, cbsa=metro.geoid)
+    msa_counties = Geo.objects.filter(geo_type=Geo.COUNTY_TYPE, cbsa=metro.cbsa, year=year)
     county_stats = {}
     for county in msa_counties:
-        county_tracts = Geo.objects.filter(geo_type=Geo.TRACT_TYPE, state=county.state, county=county.county)
+        county_tracts = Geo.objects.filter(geo_type=Geo.TRACT_TYPE, state=county.state, county=county.county, year=year)
         minority_area_stats = get_minority_area_stats(lar_data, peer_lar_data, county_tracts)
         county_stats[county.geoid] = assemble_stats(*minority_area_stats)
         county_stats[county.geoid]['name'] = county.name
