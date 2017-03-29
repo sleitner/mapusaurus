@@ -192,6 +192,10 @@ def branch_locations(request):
                 "Bad or missing values: northEastLat, northEastLon, southWestLat, southWestLon")
     query = Q(lat__gte=minlat, lat__lte=maxlat,
                       lon__gte=minlon, lon__lte=maxlon)
+    lender_id = lender[4:]
+    year = lender[:4]
+    if year == '2015':
+        lender = '2014'+lender_id
     branches = Branch.objects.filter(institution_id=lender).filter(query)
     response = '{"crs": {"type": "link", "properties": {"href": '
     response += '"http://spatialreference.org/ref/epsg/4326/", "type": '
